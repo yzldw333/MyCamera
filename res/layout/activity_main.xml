@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"  
+    android:layout_width="fill_parent"  
+    android:layout_height="fill_parent"  
+    android:orientation="vertical" > 
+    <FrameLayout 
+        android:id="@+id/myFramelayout"  
+        android:layout_width="fill_parent"  
+        android:layout_height="fill_parent"
+        									>
+        <com.example.mycamera.CameraView
+            android:id="@+id/myCameraView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:visibility="visible"
+            android:layout_gravity="center"
+        />
+        <com.example.mycamera.DrawView 
+            
+        	android:id="@+id/myDrawView"
+        	android:layout_width="fill_parent"
+        	android:layout_height="fill_parent"
+        	android:visibility="visible"
+        	android:layout_gravity="center"
+        />
+        
+    </FrameLayout>
+</LinearLayout>
