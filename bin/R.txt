@@ -235,7 +235,9 @@ int drawable abc_textfield_searchview_holo_light 0x7f020054
 int drawable abc_textfield_searchview_right_holo_dark 0x7f020055
 int drawable abc_textfield_searchview_right_holo_light 0x7f020056
 int drawable cameraicon 0x7f020057
-int drawable ic_launcher 0x7f020058
+int drawable circlebg 0x7f020058
+int drawable circleup 0x7f020059
+int drawable ic_launcher 0x7f02005a
 int id action_bar 0x7f05001f
 int id action_bar_activity_content 0x7f050015
 int id action_bar_container 0x7f05001e

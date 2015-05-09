@@ -47,6 +47,10 @@ public class MainController {
 		level2WhiteBalanceChinese.put("daylight", "ÈÕ¹â");
 		level2WhiteBalanceChinese.put("cloudy-daylight", "¶àÔÆ");
 	}
+	public int deltaRotation()
+	{
+		return condition[3] - presentRotateAngle;
+	}
 	public void rotation(int rotateAngle)
 	{
 		if(rotateAngle - presentRotateAngle>=360)
@@ -59,9 +63,9 @@ public class MainController {
 			selectedId -=1;
 			presentRotateAngle = rotateAngle;
 		}
-		processSelection();
-		
+		processSelection();	
 	}
+	
 	public void processSelection()
 	{
 		switch(scene)

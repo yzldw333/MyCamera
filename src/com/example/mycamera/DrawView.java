@@ -7,9 +7,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
 import android.graphics.PixelFormat;
+import android.graphics.Paint.Style;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -26,17 +29,19 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback,Runn
 	private Thread mThread = null;
 	private Canvas canvas = null;
 	private Paint paint = null;
-	private Bitmap transparentBitmap = null;
+	//private Bitmap circleBG = null;
 	private Face mFace = null;
 	private float mWidth = 0;
 	private float mHeight = 0;
 	private CameraController mCameraController = null;
 	private MainController mMainController = null;
-	private Bitmap cameraBitmap = null;
+	private RectF oval = null;
+	//private Bitmap cameraBitmap = null;
 	private int secondTime = -1;
 	public DrawView(Context context, AttributeSet attrs) 
 	{
 		super(context, attrs);
+		oval = new RectF();
 		mCameraController = CameraController.getInstance();
 		mMainController = MainController.getInstance();
 		mHolder = getHolder();
@@ -45,7 +50,8 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback,Runn
 		setZOrderOnTop(true);
 		mThread = new Thread(this);
 		mThreadRunning = true;
-		cameraBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.cameraicon);
+		//cameraBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.cameraicon);
+		//circleBG     = BitmapFactory.decodeResource(context.getResources(), R.drawable.circlebg);
 		// TODO Auto-generated constructor stub
 	}
 	public void beginDraw()
@@ -117,23 +123,38 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback,Runn
 			canvas.drawText(condition[3]+"º", x*6, y*6-200, paint);
 		}
 	}
-	public void drawCamera(float left,float top,float right,float bottom)
+	public void drawCircle(float centerX,float centerY,float radius)
 	{
-		canvas.drawBitmap(cameraBitmap, null, new Rect((int)left,(int)top,(int)right,(int)bottom), paint);
+		//canvas.drawBitmap(cameraBitmap, null, new Rect((int)left,(int)top,(int)right,(int)bottom), paint);
+		//canvas.drawBitmap(circleBG, new Rect(), paint);
+		oval.top = centerY - radius;
+		oval.left = centerX - radius;
+		oval.right = centerX+radius;
+		oval.bottom = centerY + radius;
+		paint.setAntiAlias(true); // 设置画笔为抗锯齿
+		paint.setStrokeWidth(20);
+		paint.setStyle(Style.STROKE);
+		paint.setColor(Color.argb(90, 161, 251, 194)); // 设置画笔颜色
+		canvas.drawArc(oval, -90,360, false, paint);
+		paint.setColor(Color.argb(116, 124, 208, 255));
+		canvas.drawArc(oval, -90,mMainController.deltaRotation(), false, paint);
+		paint.setStyle(Style.FILL);
+		paint.setTextAlign(Align.CENTER);
+		paint.setColor(Color.rgb(231, 97, 152));
+		paint.setTextSize(80);
+		canvas.drawText((int)(mMainController.deltaRotation()/360.0*100)+"%", centerX, centerY, paint);
 	}
 	public void drawTime(int second)
 	{
-		paint.setTextSize(250);
+		paint.setTextSize(400);
 		paint.setStrokeWidth(6);
-		paint.setColor(Color.CYAN);
+		paint.setColor(Color.argb(255, 224, 125,148));
 		canvas.drawText(second+"", this.getWidth()/2, this.getHeight()/2, paint);
 	}
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		// TODO Auto-generated method stub
 		//drawRectangle();
-		transparentBitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.ARGB_4444);
-		transparentBitmap.eraseColor(Color.TRANSPARENT);
 		mThread.start();
 	}
 
@@ -190,9 +211,9 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback,Runn
 				{
 					drawFace();
 				}
-				drawCamera(mCameraController.point[10]*6,mCameraController.point[11]*6,mCameraController.point[16]*6,mCameraController.point[17]*6);
-				drawLine(mCameraController.point,mCameraController.pointc);
-				drawNumber(MainController.getInstance().condition,mCameraController.point[0],mCameraController.point[1]);
+				drawCircle(mCameraController.point[0]*6,mCameraController.point[1]*6,mCameraController.radius*2.5f);
+				//drawLine(mCameraController.point,mCameraController.pointc);
+				//drawNumber(MainController.getInstance().condition,mCameraController.point[0],mCameraController.point[1]);
 				drawSelection(MainController.getInstance().getSelection(),mCameraController.point[0],mCameraController.point[1]);
 			}
 			endDraw();
